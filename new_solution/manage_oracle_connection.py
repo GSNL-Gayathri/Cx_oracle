@@ -1,10 +1,10 @@
+
 import cx_Oracle
 
 class ManageOracleConnection:
     _pool = None
 
-    @classmethod
-    def get_connection(cls):
+    def __new__(cls):
         if not cls._pool:
             cls._pool = cx_Oracle.SessionPool(
                 user="your_username",
@@ -16,6 +16,10 @@ class ManageOracleConnection:
                 getmode=cx_Oracle.SPOOL_ARRIVAL_WAIT,
                 encoding='utf-8'
             )
+        return cls._pool
+
+    @classmethod
+    def acquire(cls):
         return cls._pool.acquire()
 
     @classmethod
